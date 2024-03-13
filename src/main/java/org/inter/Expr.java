@@ -21,7 +21,7 @@ public class Expr extends Nodo {
         }
         else if( t != 0 ) emitir("if " + prueba + " goto L" + t);
         else if( f != 0 ) emitir("iffalse " + prueba + " goto L" + f);
-        else ; // nothing since both t and f fall through
+        else ;
     }
     public String toString() { return op.toString(); }
 }

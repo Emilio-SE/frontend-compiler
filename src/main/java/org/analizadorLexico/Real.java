@@ -1,4 +1,4 @@
-package org.analizadorLexico;  // Archivo Real.java
+package org.analizadorLexico;
 public class Real extends Token{
     public final float valor;
     public Real(float v) {super(Etiqueta.REAL); valor = v; }

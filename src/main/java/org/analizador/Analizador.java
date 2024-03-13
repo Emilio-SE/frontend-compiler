@@ -6,11 +6,10 @@ import org.simbolos.*;
 import org.inter.*;
 
 public class Analizador {
-    private AnalizadorLexico lex;    // Analizador lexico
-    private Token busca;   // Buscar el token
-    Ent sup = null;       // actual o superior simbolo en la tabla
-    int usado = 0;         //
-
+    private AnalizadorLexico lex;
+    private Token busca;
+    Ent sup = null;
+    int usado = 0;
     public Analizador(AnalizadorLexico l) throws IOException { lex = l; mover(); }
 
     void mover() throws IOException { busca = lex.explorar(); }
@@ -22,7 +21,7 @@ public class Analizador {
         else error("error de sintaxis");
     }
 
-    public void programa() throws IOException {  // programa -> block
+    public void programa() throws IOException {
         Instr s = bloque();
         int inicio = s.nuevaEtiqueta();  int despues = s.nuevaEtiqueta();
         s.emitirEtiqueta(inicio);  s.gen(inicio, despues);  s.emitirEtiqueta(despues);
@@ -31,7 +30,7 @@ public class Analizador {
     /**
      * Define un bloque de codigo encerrado por { y }
      * */
-    Instr bloque() throws IOException {  // block -> { decls instrs }
+    Instr bloque() throws IOException {
         coincidir('{');  Ent entGuardado = sup;  sup = new Ent(sup);
         decls(); Instr s = instrs();
         coincidir('}');  sup = entGuardado;
@@ -40,7 +39,7 @@ public class Analizador {
 
     void decls() throws IOException {
 
-        while( busca.etiqueta == Etiqueta.BASIC ) {   // D -> tipo ID ;
+        while( busca.etiqueta == Etiqueta.BASIC ) {
             Tipo p = tipo(); Token tok = busca; coincidir(Etiqueta.ID); coincidir(';');
             Id id = new Id((Palabra)tok, p, usado);
             sup.put( tok, id );
@@ -50,10 +49,10 @@ public class Analizador {
 
     Tipo tipo() throws IOException {
 
-        Tipo p = (Tipo)busca;            // expect busca.etiqueta == Etiqueta.BASIC
+        Tipo p = (Tipo)busca;
         coincidir(Etiqueta.BASIC);
-        if( busca.etiqueta != '[' ) return p; // T -> basic
-        else return dims(p);            // return array tipo
+        if( busca.etiqueta != '[' ) return p;
+        else return dims(p);
     }
 
     Tipo dims(Tipo p) throws IOException {
@@ -70,8 +69,7 @@ public class Analizador {
 
     Instr instr() throws IOException {
         Expr x;  Instr s, s1, s2;
-        Instr instrGuardada;         // save enclosing loop for breaks
-
+        Instr instrGuardada;
         switch( busca.etiqueta ) {
 
             case ';':
@@ -92,7 +90,7 @@ public class Analizador {
                 coincidir(Etiqueta.WHILE); coincidir('('); x = bool(); coincidir(')');
                 s1 = instr();
                 nodowhile.inic(x, s1);
-                Instr.Circundante = instrGuardada;  // reset Instr.Circundante
+                Instr.Circundante = instrGuardada;
                 return nodowhile;
 
             case Etiqueta.DO:
@@ -102,7 +100,7 @@ public class Analizador {
                 s1 = instr();
                 coincidir(Etiqueta.WHILE); coincidir('('); x = bool(); coincidir(')'); coincidir(';');
                 nododo.inic(s1, x);
-                Instr.Circundante = instrGuardada;  // reset Instr.Circundante
+                Instr.Circundante = instrGuardada;
                 return nododo;
 
             case Etiqueta.BREAK:
@@ -123,10 +121,10 @@ public class Analizador {
         Id id = sup.get(t);
         if( id == null ) error(t.toString() + " no declarado");
 
-        if( busca.etiqueta == '=' ) {       // S -> id = E ;
+        if( busca.etiqueta == '=' ) {
             mover();  instr = new Est(id, bool());
         }
-        else {                        // S -> L = E ;
+        else {
             Acceso x = desplazamiento(id);
             coincidir('=');  instr = new EstElem(x, bool());
         }
@@ -221,16 +219,16 @@ public class Analizador {
         }
     }
 
-    Acceso desplazamiento(Id a) throws IOException {   // I -> [E] | [E] I
-        Expr i; Expr w; Expr t1, t2; Expr ubic;  // inherit id
+    Acceso desplazamiento(Id a) throws IOException {
+        Expr i; Expr w; Expr t1, t2; Expr ubic;
 
         Tipo tipo = a.tipo;
-        coincidir('['); i = bool(); coincidir(']');     // first index, I -> [ E ]
+        coincidir('['); i = bool(); coincidir(']');
         tipo = ((Arreglo)tipo).de;
         w = new Constante(tipo.anchura);
         t1 = new Arit(new Token('*'), i, w);
         ubic = t1;
-        while( busca.etiqueta == '[' ) {      // multi-dimensional I -> [ E ] I
+        while( busca.etiqueta == '[' ) {
             coincidir('['); i = bool(); coincidir(']');
             tipo = ((Arreglo)tipo).de;
             w = new Constante(tipo.anchura);

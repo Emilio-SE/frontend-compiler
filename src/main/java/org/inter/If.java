@@ -11,8 +11,8 @@ public class If extends Instr {
     }
 
     public void gen(int b, int a) {
-        int etiqueta = nuevaEtiqueta(); // etiqueta for the code for instr
-        expr.salto(0, a);     // fall through on true, goto a on false
+        int etiqueta = nuevaEtiqueta();
+        expr.salto(0, a);
         emitirEtiqueta(etiqueta); instr.gen(etiqueta, a);
     }
 }

@@ -12,9 +12,9 @@ public class While extends Instr {
         if( expr.tipo != Tipo.Bool ) expr.error("se requiere booleano en while");
     }
     public void gen(int b, int a) {
-        despues = a;                // save etiqueta a
+        despues = a;
         expr.salto(0, a);
-        int etiqueta = nuevaEtiqueta();   // etiqueta for instr
+        int etiqueta = nuevaEtiqueta();
         emitirEtiqueta(etiqueta); instr.gen(etiqueta, b);
         emitir("goto L" + b);
     }

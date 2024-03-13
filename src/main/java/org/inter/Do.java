@@ -14,7 +14,7 @@ public class Do extends Instr {
 
     public void gen(int b, int a) {
         despues = a;
-        int etiqueta = nuevaEtiqueta();   // etiqueta for expr
+        int etiqueta = nuevaEtiqueta();
         instr.gen(b,etiqueta);
         emitirEtiqueta(etiqueta);
         expr.salto(b,0);

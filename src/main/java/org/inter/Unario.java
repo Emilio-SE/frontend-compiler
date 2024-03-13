@@ -6,7 +6,7 @@ public class Unario extends Op {
 
     public Expr expr;
 
-    public Unario(Token tok, Expr x) {    // handles minus, for ! see Not
+    public Unario(Token tok, Expr x) {
         super(tok, null);  expr = x;
         tipo = Tipo.max(Tipo.Int, expr.tipo);
         if (tipo == null ) error("error de tipo");

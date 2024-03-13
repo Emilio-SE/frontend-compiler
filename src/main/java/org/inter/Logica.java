@@ -7,7 +7,7 @@ public class Logica extends Expr {
     public Expr expr1, expr2;
 
     Logica(Token tok, Expr x1, Expr x2) {
-        super(tok, null);                      // null tipo to start
+        super(tok, null);
         expr1 = x1; expr2 = x2;
         tipo = comprobar(expr1.tipo, expr2.tipo);
         if (tipo == null ) error("error de tipo");

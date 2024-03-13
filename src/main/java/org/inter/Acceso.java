@@ -5,8 +5,8 @@ public class Acceso extends Op {
     public Id arreglo;
     public Expr indice;
 
-    public Acceso(Id a, Expr i, Tipo p) {    // p is element tipo after
-        super(new Palabra("[]", Etiqueta.INDEX), p);  // flattening the arreglo
+    public Acceso(Id a, Expr i, Tipo p) {
+        super(new Palabra("[]", Etiqueta.INDEX), p);
         arreglo = a; indice = i;
     }
 

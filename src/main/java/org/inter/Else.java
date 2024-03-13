@@ -10,9 +10,9 @@ public class Else extends Instr {
         if( expr.tipo != Tipo.Bool ) expr.error("se requiere booleano en if");
     }
     public void gen(int b, int a) {
-        int etiqueta1 = nuevaEtiqueta();   // etiqueta1 for instr1
-        int etiqueta2 = nuevaEtiqueta();   // etiqueta2 for instr2
-        expr.salto(0,etiqueta2);    // fall through to instr1 on true
+        int etiqueta1 = nuevaEtiqueta();
+        int etiqueta2 = nuevaEtiqueta();
+        expr.salto(0,etiqueta2);
         emitirEtiqueta(etiqueta1); instr1.gen(etiqueta1, a); emitir("goto L" + a);
         emitirEtiqueta(etiqueta2); instr2.gen(etiqueta2, a);
     }
